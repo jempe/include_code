@@ -8,7 +8,7 @@ import (
 	"regexp"
 	"strings"
 
-	"bitbucket.org/suciokastro/panki/utils"
+	"github.com/jempe/panki/utils"
 )
 
 func main() {
