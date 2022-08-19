@@ -8,7 +8,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/jempe/panki/utils"
+	"github.com/jempe/include_code/utils"
 )
 
 func main() {
