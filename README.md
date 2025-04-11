@@ -50,7 +50,7 @@ The `main_file.js` will be transformed into:
 To install the `include_code` library, use the following command:
 
 ```sh
-go install github.com/jempe/include_code
+go install github.com/jempe/include_code@latest
 ```
 
 ## Contributing
