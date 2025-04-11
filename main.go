@@ -11,15 +11,15 @@ import (
 	"github.com/jempe/include_code/utils"
 )
 
-const version = "0.0.1"
+const version = "0.0.2"
 
 // What's new
-// Ability to include the same file multiple times
+// Ability to insert code between HTML and JS/CSS C style comments
 
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Println("include_code v:", version)
-		fmt.Println("Search the comments /*--include:file_to_include:--*/ and /*--includeend--*/ and insert the code of the file_to_include between them")
+		fmt.Println("Search the comments <!--include:file_to_include:--> and <!--includeend--> or /*--include:file_to_include:--*/ and /*--includeend--*/ and insert the code of the file_to_include between them")
 		fmt.Println("Usage of include_code:")
 		fmt.Println("include_code <file>")
 	} else {
@@ -38,14 +38,18 @@ func main() {
 
 				mainContent := string(content)
 
-				r := regexp.MustCompile("\\/\\*--include:[^:]+:--\\*\\/")
+				rHTML := regexp.MustCompile("<!--include:[^:]+:-->")
+				rCStyle := regexp.MustCompile("\\/\\*--include:[^:]+:--\\*\\/")
 
-				includes := r.FindAll(content, -1)
+				includesHTML := rHTML.FindAll(content, -1)
+				includesCStyle := rCStyle.FindAll(content, -1)
+
+				includes := append(includesHTML, includesCStyle...)
 
 				saveFile := true
 
 				for _, include := range includes {
-					includeFileName := strings.Replace(strings.Replace(string(include), ":--*/", "", 1), "/*--include:", "", 1)
+					includeFileName := strings.Replace(strings.Replace(strings.Replace(strings.Replace(string(include), ":-->", "", 1), "<!--include:", "", 1), ":--*/", "", 1), "/*--include:", "", 1)
 					includeFile := dir + "/" + includeFileName
 
 					if utils.Exists(includeFile) && !utils.IsDirectory(includeFile) {
@@ -58,7 +62,16 @@ func main() {
 							saveFile = false
 						} else {
 
-							mainContent, err = utils.InsertBeetweenMatches(mainContent, "/*--include:"+includeFileName+":--*/", "/*--includeend--*/", "\n"+string(fileContent))
+							var startTag, endTag string
+							if strings.Contains(string(include), "<!--include:") {
+								startTag = "<!--include:" + includeFileName + ":-->"
+								endTag = "<!--includeend-->"
+							} else {
+								startTag = "/*--include:" + includeFileName + ":--*/"
+								endTag = "/*--includeend--*/"
+							}
+
+							mainContent, err = utils.InsertBeetweenMatches(mainContent, startTag, endTag, "\n"+string(fileContent))
 							if err != nil {
 								fmt.Println(err)
 
