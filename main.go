@@ -11,8 +11,14 @@ import (
 	"github.com/jempe/include_code/utils"
 )
 
+const version = "0.0.1"
+
+// What's new
+// Ability to include the same file multiple times
+
 func main() {
 	if len(os.Args) < 2 {
+		fmt.Println("include_code v:", version)
 		fmt.Println("Search the comments /*--include:file_to_include:--*/ and /*--includeend--*/ and insert the code of the file_to_include between them")
 		fmt.Println("Usage of include_code:")
 		fmt.Println("include_code <file>")
