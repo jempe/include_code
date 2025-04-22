@@ -11,10 +11,13 @@ import (
 	"github.com/jempe/include_code/utils"
 )
 
-const version = "0.0.2"
+const version = "0.0.3"
 
 // What's new
-// Ability to insert code between HTML and JS/CSS C style comments
+// Fix bug with multibyte characters
+
+// TODO
+// fix adding a space at the end of each replaced line
 
 func main() {
 	if len(os.Args) < 2 {
