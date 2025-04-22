@@ -19,7 +19,7 @@ func TestInsertBeetweenMatches(t *testing.T) {
 		expected       string
 	}{
 		// Case 1: Basic insertion
-		{"Hello [World]", "[", "]", "Beautiful ", "Hello [Beautiful ]"},
+		{"Hello --[World]--", "--[", "]--", "Beautiful ", "Hello --[Beautiful ]--"},
 		// Case 2: No match
 		{"Hello World", "[", "]", "Beautiful ", "Hello World"},
 		// Case 3: Multiple matches
